@@ -1,0 +1,14 @@
+{
+  "name": "access-watch-js",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "author": "François Hodierne",
+  "license": "MIT",
+  "dependencies": {
+    "ip-address": "^5.8.8",
+    "lru-cache": "^4.1.1",
+    "md5": "^2.2.1",
+    "request": "^2.83.0"
+  }
+}
