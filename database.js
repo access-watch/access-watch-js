@@ -54,7 +54,7 @@ AccessWatchDatabase.prototype = {
     }
 
     return this.apiRequest(options, (err, result) => {
-      if (result && result.addresses) {
+      if (result && result.hasOwnProperty('addresses')) {
         callback(result.addresses)
       } else {
         console.log('batchAddressData', err, result)
@@ -71,7 +71,7 @@ AccessWatchDatabase.prototype = {
     }
 
     return this.apiRequest(options, (err, result) => {
-      if (result && result.identities) {
+      if (result && result.hasOwnProperty('identities')) {
         callback(result.identities)
       } else {
         console.log('batchIdentityData', err, result)
