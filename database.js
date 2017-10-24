@@ -1,4 +1,4 @@
-var request = require('request')
+var requestPromise = require('request-promise-native')
 
 var md5 = require('md5')
 
@@ -28,59 +28,57 @@ function AccessWatchDatabase (apiKey) {
 
 AccessWatchDatabase.prototype = {
 
-  addressData: function (address, callback) {
+  addressData: function (address, params) {
+    // Here instead of forwarding the params we could create our own JS params (withActivity: Boolean for example)
+    // And translate them into the API equivalent (include_activity: 1)
     const options = {
       json: true,
       method: 'GET',
       url: [this.apiBaseUrl, this.apiVersion, 'database', 'address', address].join('/'),
-      cacheKey: ['address', md5(address)].join('_')
+      cacheKey: ['address', md5(address)].join('_'),
+      qs: params,
     }
 
-    return this.apiRequest(options, (err, result) => {
-      if (!err) {
-        callback(result)
-      } else {
+    return this.apiRequest(options)
+      .catch(err => {
         console.log('addressData error', err)
-        callback()
-      }
-    })
+        throw err;
+      })
   },
 
-  batchAddressData: function (addresses, callback) {
+  batchAddressData: function (addresses) {
     const options = {
       method: 'POST',
       url: [this.apiBaseUrl, this.apiVersion, 'database', 'addresses'].join('/'),
       json: addresses
     }
 
-    return this.apiRequest(options, (err, result) => {
-      if (result && result.hasOwnProperty('addresses')) {
-        callback(result.addresses)
-      } else {
+    return this.apiRequest(options)
+      .then(result => {
+        return result && result.hasOwnProperty('addresses') ? result.addresses : []
+      }).catch(err => {
         console.log('batchAddressData', err, result)
-        callback()
-      }
-    })
+        throw err
+      })
   },
 
-  batchIdentityData: function (identities, callback) {
+  batchIdentityData: function (identities) {
     const options = {
       method: 'POST',
       url: [this.apiBaseUrl, this.apiVersion, 'database', 'identities'].join('/'),
       json: identities
     }
 
-    return this.apiRequest(options, (err, result) => {
-      if (result && result.hasOwnProperty('identities')) {
-        callback(result.identities)
-      } else {
+    return this.apiRequest(options)
+      .then(result => {
+        return result && result.hasOwnProperty('identities') ? result.identities : []
+      }).catch(err => {
         console.log('batchIdentityData', err, result)
-        callback()
-      }
-    })
+        throw err
+      })
   },
 
-  apiRequest: function (options, callback) {
+  apiRequest: function (options) {
     options.headers = {
       'User-Agent': this.requestUserAgent,
       'Api-Key': this.apiKey
@@ -94,25 +92,18 @@ AccessWatchDatabase.prototype = {
       }
     }
 
-    request(options, (err, response, body) => {
-      if (err) {
+    return requestPromise(options)
+      .then(body => {
+        if (typeof body === 'object') {
+          this.cache.set(options.cacheKey, body)
+          return body
+        }
+        return
+      })
+      .catch(err => {
         console.log('error from request', err)
-        callback(err)
-        return
-      }
-
-      if (typeof body !== 'object') {
-        console.log('body not an object', body)
-        callback()
-        return
-      }
-
-      if (this.cache && options.cacheKey) {
-        this.cache.set(options.cacheKey, body)
-      }
-
-      callback(null, body)
-    })
+        throw err
+      })
   }
 
 }
