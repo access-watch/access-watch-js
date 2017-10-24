@@ -34,7 +34,7 @@ AccessWatchDatabase.prototype = {
     const options = {
       json: true,
       method: 'GET',
-      url: [this.apiBaseUrl, this.apiVersion, 'database', 'address', address].join('/'),
+      url: `${this.resolveEndpoint('address')}/${address}`,
       cacheKey: ['address', md5(address)].join('_'),
       qs: params,
     }
@@ -46,10 +46,27 @@ AccessWatchDatabase.prototype = {
       })
   },
 
+  robotData: function (robot, params) {
+    const robotId = robot.urlid || robot.uuid;
+    const options = {
+      json: true,
+      method: 'GET',
+      url: `${this.resolveEndpoint('robot')}/${robotId}`,
+      cacheKey: ['robot', md5(robotId)].join('_'),
+      qs: params,
+    }
+
+    return this.apiRequest(options)
+      .catch(err => {
+        console.log('robotData error', err)
+        throw err;
+      })
+  },
+
   batchAddressData: function (addresses) {
     const options = {
       method: 'POST',
-      url: [this.apiBaseUrl, this.apiVersion, 'database', 'addresses'].join('/'),
+      url: this.resolveEndpoint('addresses'),
       json: addresses
     }
 
@@ -65,7 +82,7 @@ AccessWatchDatabase.prototype = {
   batchIdentityData: function (identities) {
     const options = {
       method: 'POST',
-      url: [this.apiBaseUrl, this.apiVersion, 'database', 'identities'].join('/'),
+      url: this.resolveEndpoint('identities'),
       json: identities
     }
 
@@ -104,6 +121,10 @@ AccessWatchDatabase.prototype = {
         console.log('error from request', err)
         throw err
       })
+  },
+
+  resolveEndpoint: function(endpoint) {
+    return [this.apiBaseUrl, this.apiVersion, 'database', endpoint].join('/');
   }
 
 }
