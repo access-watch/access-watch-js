@@ -104,8 +104,7 @@ AccessWatchDatabase.prototype = {
     if (this.cache && options.cacheKey) {
       const object = this.cache.get(options.cacheKey)
       if (object !== undefined) {
-        callback(null, object)
-        return
+        return Promise.resolve(object);
       }
     }
 
