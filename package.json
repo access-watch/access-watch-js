@@ -2,7 +2,7 @@
   "name": "access-watch",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/index.js",
   "author": "François Hodierne",
   "license": "MIT",
   "dependencies": {
@@ -11,5 +11,12 @@
     "md5": "^2.2.1",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
+  },
+  "scripts": {
+    "build": "babel src -d build"
   }
 }
