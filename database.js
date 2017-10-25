@@ -110,11 +110,11 @@ AccessWatchDatabase.prototype = {
 
     return requestPromise(options)
       .then(body => {
-        if (typeof body === 'object') {
-          this.cache.set(options.cacheKey, body)
-          return body
+        if (typeof body !== 'object') {
+          throw 'Received body was not an object'
         }
-        return
+        this.cache.set(options.cacheKey, body)
+        return body
       })
       .catch(err => {
         console.log('error from request', err)
