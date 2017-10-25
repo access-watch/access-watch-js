@@ -28,7 +28,7 @@ function AccessWatchDatabase (apiKey) {
 
 AccessWatchDatabase.prototype = {
 
-  addressData: function (address, params) {
+  getAddress: function (address, params) {
     // Here instead of forwarding the params we could create our own JS params (withActivity: Boolean for example)
     // And translate them into the API equivalent (include_activity: 1)
     const options = {
@@ -46,7 +46,7 @@ AccessWatchDatabase.prototype = {
       })
   },
 
-  robotData: function (robot, params) {
+  getRobot: function (robot, params) {
     const robotId = robot.urlid || robot.uuid;
     const options = {
       json: true,
