@@ -4,9 +4,11 @@ var md5 = require('md5')
 
 var LRU = require('lru-cache')
 
-function AccessWatchDatabase (apiKey) {
-  if (!(this instanceof AccessWatchDatabase)) {
-    return new AccessWatchDatabase(apiKey)
+var signature = require('./signature')
+
+function Database (apiKey) {
+  if (!(this instanceof Database)) {
+    return new Database(apiKey)
   }
 
   this.apiKey = apiKey
@@ -26,7 +28,7 @@ function AccessWatchDatabase (apiKey) {
   }
 }
 
-AccessWatchDatabase.prototype = {
+Database.prototype = {
 
   getAddress: function (address, params) {
     // Here instead of forwarding the params we could create our own JS params (withActivity: Boolean for example)
@@ -36,61 +38,44 @@ AccessWatchDatabase.prototype = {
       method: 'GET',
       url: `${this.resolveEndpoint('address')}/${address}`,
       cacheKey: ['address', md5(address)].join('_'),
-      qs: params,
+      qs: params
     }
 
     return this.apiRequest(options)
       .catch(err => {
-        console.log('addressData error', err)
-        throw err;
+        throw err
       })
   },
 
   getRobot: function (robot, params) {
-    const robotId = robot.urlid || robot.uuid;
+    const robotId = robot.urlid || robot.uuid
+
     const options = {
       json: true,
       method: 'GET',
       url: `${this.resolveEndpoint('robot')}/${robotId}`,
       cacheKey: ['robot', md5(robotId)].join('_'),
-      qs: params,
+      qs: params
     }
 
     return this.apiRequest(options)
       .catch(err => {
-        console.log('robotData error', err)
-        throw err;
-      })
-  },
-
-  batchAddressData: function (addresses) {
-    const options = {
-      method: 'POST',
-      url: this.resolveEndpoint('addresses'),
-      json: addresses
-    }
-
-    return this.apiRequest(options)
-      .then(result => {
-        return result && result.hasOwnProperty('addresses') ? result.addresses : []
-      }).catch(err => {
-        console.log('batchAddressData', err, result)
         throw err
       })
   },
 
-  batchIdentityData: function (identities) {
+  getIdentity: function ({address, userAgent, headers}) {
+    const identityId = signature.getIdentityId({address, userAgent, headers})
+
     const options = {
       method: 'POST',
-      url: this.resolveEndpoint('identities'),
-      json: identities
+      url: `${this.resolveEndpoint('identity')}`,
+      cacheKey: ['identity', identityId].join('_'),
+      json: {address, userAgent, headers}
     }
 
     return this.apiRequest(options)
-      .then(result => {
-        return result && result.hasOwnProperty('identities') ? result.identities : []
-      }).catch(err => {
-        console.log('batchIdentityData', err, result)
+      .catch(err => {
         throw err
       })
   },
@@ -104,7 +89,7 @@ AccessWatchDatabase.prototype = {
     if (this.cache && options.cacheKey) {
       const object = this.cache.get(options.cacheKey)
       if (object !== undefined) {
-        return Promise.resolve(object);
+        return Promise.resolve(object)
       }
     }
 
@@ -117,15 +102,14 @@ AccessWatchDatabase.prototype = {
         return body
       })
       .catch(err => {
-        console.log('error from request', err)
         throw err
       })
   },
 
-  resolveEndpoint: function(endpoint) {
-    return [this.apiBaseUrl, this.apiVersion, 'database', endpoint].join('/');
+  resolveEndpoint: function (endpoint) {
+    return [this.apiBaseUrl, this.apiVersion, 'database', endpoint].join('/')
   }
 
 }
 
-module.exports = AccessWatchDatabase
+module.exports = Database
