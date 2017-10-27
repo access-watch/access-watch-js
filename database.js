@@ -1,10 +1,10 @@
-var requestPromise = require('request-promise-native')
+const requestPromise = require('request-promise-native')
 
-var md5 = require('md5')
+const md5 = require('md5')
 
-var LRU = require('lru-cache')
+const LRU = require('lru-cache')
 
-var signature = require('./signature')
+const signature = require('./signature')
 
 function Database (apiKey) {
   if (!(this instanceof Database)) {
@@ -42,9 +42,6 @@ Database.prototype = {
     }
 
     return this.apiRequest(options)
-      .catch(err => {
-        throw err
-      })
   },
 
   getRobot: function (robot, params) {
@@ -59,9 +56,6 @@ Database.prototype = {
     }
 
     return this.apiRequest(options)
-      .catch(err => {
-        throw err
-      })
   },
 
   getIdentity: function ({address, userAgent, headers}) {
@@ -75,9 +69,6 @@ Database.prototype = {
     }
 
     return this.apiRequest(options)
-      .catch(err => {
-        throw err
-      })
   },
 
   apiRequest: function (options) {
@@ -96,13 +87,12 @@ Database.prototype = {
     return requestPromise(options)
       .then(body => {
         if (typeof body !== 'object') {
-          throw 'Received body was not an object'
+          throw new Error('Received body was not an object')
         }
-        this.cache.set(options.cacheKey, body)
+        if (this.cache && options.cacheKey) {
+          this.cache.set(options.cacheKey, body)
+        }
         return body
-      })
-      .catch(err => {
-        throw err
       })
   },
 
