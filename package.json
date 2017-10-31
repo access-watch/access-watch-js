@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha $(find test -name '*.js')"
+    "test": "./node_modules/.bin/mocha"
   },
   "author": {
     "name": "François Hodierne",

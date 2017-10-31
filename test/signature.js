@@ -40,4 +40,12 @@ describe('Signature', function () {
   it('should throw an error if headers and user agent are missing', function () {
     assert.throws(function () { signature.getIdentityId({address: bingAddress}) }, Error)
   })
+
+  it('should throw an error if user agent is not a string', function () {
+    assert.throws(function () { signature.getIdentityId({address: bingAddress, userAgent: true}) }, Error)
+  })
+
+  it('should throw an error if headers is not an object', function () {
+    assert.throws(function () { signature.getIdentityId({address: bingAddress, headers: true}) }, Error)
+  })
 })
