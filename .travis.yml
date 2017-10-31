@@ -3,7 +3,5 @@ node_js:
   - "6"
   - "7"
   - "8"
-notifications:
-  slack: access-watch:W8G0ZKWHdoQTEB1fs7RvM05u
 script:
   - npm run test
