@@ -13,7 +13,7 @@ function Database (apiKey) {
 
   this.apiKey = apiKey
 
-  this.requestUserAgent = 'Access Watch Javascript Database Library'
+  this.apiUserAgent = 'Access Watch Javascript Database Library'
 
   this.apiBaseUrl = 'https://api.access.watch'
 
@@ -33,11 +33,13 @@ Database.prototype = {
   getAddress: function (address, params) {
     // Here instead of forwarding the params we could create our own JS params (withActivity: Boolean for example)
     // And translate them into the API equivalent (include_activity: 1)
+    const addressId = signature.getAddressId(address)
+
     const options = {
       json: true,
       method: 'GET',
       url: `${this.resolveEndpoint('address')}/${address}`,
-      cacheKey: ['address', md5(address)].join('_'),
+      cacheKey: ['address', addressId].join('_'),
       qs: params
     }
 
@@ -73,7 +75,7 @@ Database.prototype = {
 
   apiRequest: function (options) {
     options.headers = {
-      'User-Agent': this.requestUserAgent,
+      'User-Agent': this.apiUserAgent,
       'Api-Key': this.apiKey
     }
 

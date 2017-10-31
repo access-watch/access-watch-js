@@ -1,4 +1,4 @@
-var md5 = require('md5')
+const md5 = require('md5')
 
 const identityHeaders = {
   'accept': 'Accept',
@@ -12,45 +12,50 @@ const identityHeaders = {
 
 function getIdentityId ({address, userAgent, headers}) {
   if (typeof address !== 'string') {
-    throw 'Missing or invalid argument: address'
+    throw new Error('Missing or invalid argument: address')
   }
   if (typeof headers === 'object') {
     return getIdentityIdWithHeaders({address, headers})
-  }
-  if (typeof userAgent === 'string') {
+  } else if (typeof userAgent === 'string') {
     return getIdentityIdWithUserAgent({address, userAgent})
   } else {
-    throw 'Missing or invalid argument: userAgent or headers'
+    throw new Error('Missing or invalid argument: userAgent or headers')
   }
 }
 
 function getIdentityIdWithHeaders ({address, headers}) {
-  return md5(getHeadersSignature(headers) + md5(address))
+  return md5(getHeadersSignatureId(headers) + getAddressId(address))
 }
 
 function getIdentityIdWithUserAgent ({address, userAgent}) {
-  return md5(md5(address) + md5(userAgent))
+  return md5(getUserAgentId(userAgent) + getAddressId(address))
 }
 
-function getHeadersSignature (headers) {
+function getAddressId (address) {
+  return md5(address)
+}
+
+function getUserAgentId (userAgent) {
+  return md5(userAgent.substring(0, 1024))
+}
+
+function getHeadersSignatureId (headers) {
   let lowerCaseHeaders = {}
-  for (let key in headers) {
-    if (headers.hasOwnProperty(key)) {
-      lowerCaseHeaders[key.toLowerCase()] = headers[key]
-    }
-  }
+  Object.keys(headers).forEach(key => {
+    lowerCaseHeaders[key.toLowerCase()] = headers[key]
+  })
 
   let obj = {}
-  for (let key in identityHeaders) {
-    if (identityHeaders.hasOwnProperty(key) && lowerCaseHeaders.hasOwnProperty(key)) {
+  Object.keys(identityHeaders).forEach(key => {
+    if (lowerCaseHeaders.hasOwnProperty(key)) {
       let normalisedKey = identityHeaders[key]
       obj[normalisedKey] = lowerCaseHeaders[key]
     }
-  }
+  })
 
-  let string = Object.keys(obj).map(key => [key, obj[key]].join(':')).join(';') + ';'
+  const string = Object.keys(obj).map(key => [key, obj[key]].join(':')).join(';') + ';'
 
-  let hash = md5(string)
+  const hash = md5(string)
 
   return hash
 }
@@ -58,7 +63,7 @@ function getHeadersSignature (headers) {
 module.exports = {
   identityHeaders,
   getIdentityId,
-  getIdentityIdWithUserAgent,
-  getIdentityIdWithHeaders,
-  getHeadersSignature
+  getAddressId,
+  getUserAgentId,
+  getHeadersSignatureId
 }

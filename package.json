@@ -3,6 +3,9 @@
   "version": "0.1.1",
   "description": "",
   "main": "index.js",
+  "scripts": {
+    "test": "mocha $(find test -name '*.js')"
+  },
   "author": {
     "name": "François Hodierne",
     "email": "francois@access.watch"
@@ -22,6 +25,7 @@
     "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
+    "mocha": "^4.0.1",
     "standard": "^10.0.3"
   }
 }
