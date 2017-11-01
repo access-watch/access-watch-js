@@ -97,6 +97,13 @@ Database.prototype = {
         }
         return response.data
       })
+      .catch(err => {
+        if (err.response && err.response.data && err.response.data.message) {
+          throw new Error(err.response.data.message)
+        } else {
+          throw err
+        }
+      })
   },
 
   resolveEndpoint: function (endpoint) {
