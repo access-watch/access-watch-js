@@ -1,14 +1,31 @@
 {
-  "name": "access-watch",
-  "version": "0.1.0",
+  "name": "access-watch-sdk",
+  "version": "0.1.1",
   "description": "",
   "main": "index.js",
-  "author": "François Hodierne",
+  "scripts": {
+    "test": "standard && mocha"
+  },
+  "author": {
+    "name": "François Hodierne",
+    "email": "francois@access.watch"
+  },
+  "contributors": [
+    {
+      "name": "Jean Duthon",
+      "email": "jean@access.watch"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "ip-address": "^5.8.8",
     "lru-cache": "^4.1.1",
     "md5": "^2.2.1",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5"
+  },
+  "devDependencies": {
+    "mocha": "^4.0.1",
+    "standard": "^10.0.3"
   }
 }

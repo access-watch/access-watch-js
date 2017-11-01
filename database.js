@@ -1,17 +1,19 @@
-var request = require('request')
+const requestPromise = require('request-promise-native')
 
-var md5 = require('md5')
+const md5 = require('md5')
 
-var LRU = require('lru-cache')
+const LRU = require('lru-cache')
 
-function AccessWatchDatabase (apiKey) {
-  if (!(this instanceof AccessWatchDatabase)) {
-    return new AccessWatchDatabase(apiKey)
+const signature = require('./signature')
+
+function Database (apiKey) {
+  if (!(this instanceof Database)) {
+    return new Database(apiKey)
   }
 
   this.apiKey = apiKey
 
-  this.requestUserAgent = 'Access Watch Javascript Database Library'
+  this.apiUserAgent = 'Access Watch Javascript Database Library'
 
   this.apiBaseUrl = 'https://api.access.watch'
 
@@ -26,95 +28,80 @@ function AccessWatchDatabase (apiKey) {
   }
 }
 
-AccessWatchDatabase.prototype = {
+Database.prototype = {
 
-  addressData: function (address, callback) {
+  getAddress: function (address, params) {
+    // Here instead of forwarding the params we could create our own JS params (withActivity: Boolean for example)
+    // And translate them into the API equivalent (include_activity: 1)
+    const addressId = signature.getAddressId(address)
+
     const options = {
       json: true,
       method: 'GET',
-      url: [this.apiBaseUrl, this.apiVersion, 'database', 'address', address].join('/'),
-      cacheKey: ['address', md5(address)].join('_')
+      url: `${this.resolveEndpoint('address')}/${address}`,
+      cacheKey: ['address', addressId].join('_'),
+      qs: params
     }
 
-    return this.apiRequest(options, (err, result) => {
-      if (!err) {
-        callback(result)
-      } else {
-        console.log('addressData error', err)
-        callback()
-      }
-    })
+    return this.apiRequest(options)
   },
 
-  batchAddressData: function (addresses, callback) {
+  getRobot: function (robot, params) {
+    const robotId = robot.urlid || robot.uuid
+
+    const options = {
+      json: true,
+      method: 'GET',
+      url: `${this.resolveEndpoint('robot')}/${robotId}`,
+      cacheKey: ['robot', md5(robotId)].join('_'),
+      qs: params
+    }
+
+    return this.apiRequest(options)
+  },
+
+  getIdentity: function ({address, userAgent, headers}) {
+    const identityId = signature.getIdentityId({address, userAgent, headers})
+
     const options = {
       method: 'POST',
-      url: [this.apiBaseUrl, this.apiVersion, 'database', 'addresses'].join('/'),
-      json: addresses
+      url: `${this.resolveEndpoint('identity')}`,
+      cacheKey: ['identity', identityId].join('_'),
+      json: {address, userAgent, headers}
     }
 
-    return this.apiRequest(options, (err, result) => {
-      if (result && result.hasOwnProperty('addresses')) {
-        callback(result.addresses)
-      } else {
-        console.log('batchAddressData', err, result)
-        callback()
-      }
-    })
+    return this.apiRequest(options)
   },
 
-  batchIdentityData: function (identities, callback) {
-    const options = {
-      method: 'POST',
-      url: [this.apiBaseUrl, this.apiVersion, 'database', 'identities'].join('/'),
-      json: identities
-    }
-
-    return this.apiRequest(options, (err, result) => {
-      if (result && result.hasOwnProperty('identities')) {
-        callback(result.identities)
-      } else {
-        console.log('batchIdentityData', err, result)
-        callback()
-      }
-    })
-  },
-
-  apiRequest: function (options, callback) {
+  apiRequest: function (options) {
     options.headers = {
-      'User-Agent': this.requestUserAgent,
+      'User-Agent': this.apiUserAgent,
       'Api-Key': this.apiKey
     }
 
     if (this.cache && options.cacheKey) {
       const object = this.cache.get(options.cacheKey)
       if (object !== undefined) {
-        callback(null, object)
-        return
+        return Promise.resolve(object)
       }
     }
 
-    request(options, (err, response, body) => {
-      if (err) {
-        console.log('error from request', err)
-        callback(err)
-        return
-      }
+    return requestPromise(options)
+      .then(body => {
+        if (typeof body !== 'object') {
+          throw new Error('Received body was not an object')
+        }
+        if (this.cache && options.cacheKey) {
+          this.cache.set(options.cacheKey, body)
+        }
+        return body
+      })
+  },
 
-      if (typeof body !== 'object') {
-        console.log('body not an object', body)
-        callback()
-        return
-      }
-
-      if (this.cache && options.cacheKey) {
-        this.cache.set(options.cacheKey, body)
-      }
-
-      callback(null, body)
-    })
+  resolveEndpoint: function (endpoint) {
+    return [this.apiBaseUrl, this.apiVersion, 'database', endpoint].join('/')
   }
 
 }
 
-module.exports = AccessWatchDatabase
+module.exports = Database
