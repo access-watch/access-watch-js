@@ -1,4 +1,4 @@
-const requestPromise = require('request-promise-native')
+const request = require('axios')
 
 const md5 = require('md5')
 
@@ -36,11 +36,10 @@ Database.prototype = {
     const addressId = signature.getAddressId(address)
 
     const options = {
-      json: true,
       method: 'GET',
       url: `${this.resolveEndpoint('address')}/${address}`,
       cacheKey: ['address', addressId].join('_'),
-      qs: params
+      params
     }
 
     return this.apiRequest(options)
@@ -50,11 +49,10 @@ Database.prototype = {
     const robotId = robot.urlid || robot.uuid
 
     const options = {
-      json: true,
       method: 'GET',
       url: `${this.resolveEndpoint('robot')}/${robotId}`,
       cacheKey: ['robot', md5(robotId)].join('_'),
-      qs: params
+      params
     }
 
     return this.apiRequest(options)
@@ -67,7 +65,7 @@ Database.prototype = {
       method: 'POST',
       url: `${this.resolveEndpoint('identity')}`,
       cacheKey: ['identity', identityId].join('_'),
-      json: {address, userAgent, headers}
+      data: {address, userAgent, headers}
     }
 
     return this.apiRequest(options)
@@ -75,8 +73,11 @@ Database.prototype = {
 
   apiRequest: function (options) {
     options.headers = {
-      'User-Agent': this.apiUserAgent,
-      'Api-Key': this.apiKey
+      'User-Agent': this.apiUserAgent
+    }
+
+    if (this.apiKey) {
+      options.headers['Api-Key'] = this.apiKey
     }
 
     if (this.cache && options.cacheKey) {
@@ -86,15 +87,22 @@ Database.prototype = {
       }
     }
 
-    return requestPromise(options)
-      .then(body => {
-        if (typeof body !== 'object') {
+    return request(options)
+      .then(response => {
+        if (typeof response.data !== 'object') {
           throw new Error('Received body was not an object')
         }
         if (this.cache && options.cacheKey) {
-          this.cache.set(options.cacheKey, body)
+          this.cache.set(options.cacheKey, response.data)
         }
-        return body
+        return response.data
+      })
+      .catch(err => {
+        if (err.response && err.response.data && err.response.data.message) {
+          throw new Error(err.response.data.message)
+        } else {
+          throw err
+        }
       })
   },
 
