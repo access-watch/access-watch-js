@@ -23,7 +23,7 @@ function Database (apiKey) {
   if (!this.cache) {
     // Should we be able to pass the cache settings in the configuration?
     const cacheSize = 10000
-    const maxAge = 1 * 60 * 60
+    const maxAge = 1 * 60 * 60 * 1000
     this.cache = LRU({max: cacheSize, maxAge: maxAge})
   }
 }
