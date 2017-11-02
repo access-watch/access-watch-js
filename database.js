@@ -39,7 +39,7 @@ Database.prototype = {
       method: 'GET',
       url: `${this.resolveEndpoint('address')}/${address}`,
       cacheKey: ['address', addressId].join('_'),
-      params: params
+      params
     }
 
     return this.apiRequest(options)
@@ -52,7 +52,7 @@ Database.prototype = {
       method: 'GET',
       url: `${this.resolveEndpoint('robot')}/${robotId}`,
       cacheKey: ['robot', md5(robotId)].join('_'),
-      params: params
+      params
     }
 
     return this.apiRequest(options)
