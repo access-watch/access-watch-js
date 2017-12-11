@@ -1,6 +1,6 @@
 {
   "name": "access-watch-sdk",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,8 +18,8 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.17.0",
-    "ip-address": "^5.8.8",
+    "axios": "^0.17.1",
+    "ip-address": "^5.8.9",
     "lru-cache": "^4.1.1",
     "md5": "^2.2.1"
   },
