@@ -5,20 +5,20 @@ const addressSharedFilters = require('./address_shared');
 module.exports = [
   {
     id: 'identity.type',
-    label: 'Type',
+    label: 'type',
     values: ['browser', 'robot'],
     valueToLabel: type => type === 'browser' ? 'Human' : 'Robot'
   },
   {
     id: 'request.method',
-    label: 'Method',
+    label: 'method',
     values: ['Head', 'Get', 'Post', 'Put', 'Delete']
   }, {
     id: 'response.status',
-    label: 'Status',
+    label: 'status',
   }, {
     id: 'request.url',
-    label: 'Url',
+    label: 'url',
     fullText: true
   }, {
     id: 'identity.name',

@@ -3,8 +3,6 @@ const country = require('./country');
 const address = require('./address');
 const sharedFilters = require('./address_shared');
 
-
-
 module.exports = [
   reputation,
   ...sharedFilters,

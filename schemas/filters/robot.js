@@ -1,22 +1,14 @@
-const reputation = require("./reputation");
+const reputation = require('./reputation');
 
 module.exports = [
   reputation,
   {
-    id: "name",
+    id: 'name',
     fullText: true
   },
   {
-    id: "type",
-    values: [
-      "crawler",
-      "rss",
-      "monitoring",
-      "security",
-      "seo",
-      "social",
-      "advertising",
-      "tor"
-    ]
-  }
+    id: 'flags',
+    label: 'type',
+    values: ['crawler', 'rss', 'monitoring', 'security', 'seo', 'social', 'advertising', 'tor'],
+  },
 ];

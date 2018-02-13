@@ -11,7 +11,8 @@ module.exports = [{
 }, {
   id: 'as_number'
 }, {
-  id: 'type',
+  id: 'flags',
+  label: 'type',
   values: [
     'broadband',
     'mobile',
