@@ -1,3 +1,5 @@
+const country = require('./country');
+
 module.exports = [{
   id: 'value',
   label: 'ip',
@@ -31,4 +33,4 @@ module.exports = [{
     'crawler',
     'robot'
   ]
-}];
+}, country];

@@ -1,5 +1,4 @@
 const reputation = require('./reputation');
-const country = require('./country');
 const addressSharedFilters = require('./address_shared');
 
 module.exports = [
@@ -12,7 +11,7 @@ module.exports = [
   {
     id: 'request.method',
     label: 'method',
-    values: ['Head', 'Get', 'Post', 'Put', 'Delete']
+    values: ['HEAD', 'GET', 'POST', 'PUT', 'DELETE']
   }, {
     id: 'response.status',
     label: 'status',
@@ -21,12 +20,17 @@ module.exports = [
     label: 'url',
     fullText: true
   }, {
-    id: 'identity.name',
+    id: 'user_agent.value',
     fullText: true,
   },
   reputation,
-  ...addressSharedFilters.map(
-    filter => Object.assign({}, filter, { id: `address.${filter.id}`} )
-  ),
-  country,
+  ...addressSharedFilters.map(filter => Object.assign(
+    {},
+    filter, {
+      id: `address.${filter.id}`
+    },
+    filter.label ?  {
+      label: `address.${filter.label}`
+    } : {}
+  )),
 ];
