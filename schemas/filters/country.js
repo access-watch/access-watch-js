@@ -1,7 +1,4 @@
-const countries = {
-  FR: 'France',
-  DE: 'Germany',
-};
+const countries = require('./countries.json');
 
 module.exports = {
   id: 'country_code',
