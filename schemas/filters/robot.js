@@ -1,7 +1,6 @@
 const reputation = require('./reputation');
 
 module.exports = [
-  reputation,
   {
     id: 'name',
     fullText: true
@@ -11,4 +10,5 @@ module.exports = [
     label: 'type',
     values: ['crawler', 'rss', 'monitoring', 'security', 'seo', 'social', 'advertising', 'tor'],
   },
+  reputation
 ];

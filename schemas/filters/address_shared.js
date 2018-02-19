@@ -8,11 +8,12 @@ module.exports = [{
   id: 'hostname',
   fullText: true
 }, {
-  id: 'network_name',
-  fullText: true
-}, {
   id: 'as_number'
 }, {
+  id: 'network_name',
+  fullText: true
+}, country
+, {
   id: 'flags',
   label: 'type',
   values: [
@@ -33,4 +34,4 @@ module.exports = [{
     'crawler',
     'robot'
   ]
-}, country];
+}];
