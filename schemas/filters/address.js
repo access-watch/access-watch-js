@@ -4,15 +4,19 @@ const country = require('./country');
 module.exports = [{
   id: 'value',
   label: 'ip',
-  fullText: true
+  fullText: true,
+  showInPanel: true,
 }, {
   id: 'hostname',
-  fullText: true
+  fullText: true,
+  showInPanel: true,
 }, {
-  id: 'as_number'
+  id: 'as_number',
+  showInPanel: true,
 }, {
   id: 'network_name',
-  fullText: true
+  fullText: true,
+  showInPanel: true,
 }, country
 , {
   id: 'flags',
@@ -34,5 +38,6 @@ module.exports = [{
     'tor',
     'crawler',
     'robot'
-  ]
+  ],
+  showInPanel: true,
 }, reputation ];

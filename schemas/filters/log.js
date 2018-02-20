@@ -11,32 +11,39 @@ const statusCodes = [
   500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511
 ];
 
+const addressesShowInPanel = ['value'];
+
 module.exports = [
   {
     id: 'identity.type',
     label: 'type',
     values: ['browser', 'robot'],
-    valueToLabel: type => (type === 'browser' ? 'Human' : 'Robot')
+    valueToLabel: type => (type === 'browser' ? 'Human' : 'Robot'),
+    showInPanel: true,
   },
   {
     id: 'request.method',
     label: 'method',
-    values: ['HEAD', 'GET', 'POST', 'PUT', 'DELETE']
+    values: ['HEAD', 'GET', 'POST', 'PUT', 'DELETE'],
+    showInPanel: true,
   },
   {
     id: 'response.status',
     label: 'status',
     transform: status => parseInt(status, 10),
     values: statusCodes,
+    showInPanel: true,
   },
   {
     id: 'request.url',
     label: 'url',
-    fullText: true
+    fullText: true,
+    showInPanel: true,
   },
   {
     id: 'user_agent.value',
-    fullText: true
+    fullText: true,
+    showInPanel: true,
   },
   reputation,
   ...addressFilters.map(filter =>
@@ -44,7 +51,8 @@ module.exports = [
       {},
       filter,
       {
-        id: `address.${filter.id}`
+        id: `address.${filter.id}`,
+        showInPanel: addressesShowInPanel.indexOf(filter.id) !== -1,
       },
       filter.label
         ? {
