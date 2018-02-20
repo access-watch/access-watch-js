@@ -1,5 +1,5 @@
 const reputation = require('./reputation');
-const addressSharedFilters = require('./address_shared');
+const addressFilters = require('./address');
 
 const statusCodes = [
   100, 101, 102,
@@ -39,7 +39,7 @@ module.exports = [
     fullText: true
   },
   reputation,
-  ...addressSharedFilters.map(filter =>
+  ...addressFilters.map(filter =>
     Object.assign(
       {},
       filter,
