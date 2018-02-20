@@ -1,6 +1,6 @@
 {
   "name": "access-watch-sdk",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "md5": "^2.2.1"
   },
   "devDependencies": {
-    "mocha": "^4.0.1",
+    "mocha": "^4.1.0",
     "standard": "^10.0.3"
   }
 }
