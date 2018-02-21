@@ -1,20 +1,22 @@
 {
   "name": "access-watch-sdk",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/access-watch/access-watch-js.git"
+  },
   "main": "index.js",
   "scripts": {
     "test": "standard && mocha"
   },
   "author": {
-    "name": "François Hodierne",
-    "email": "francois@access.watch"
+    "name": "Access Watch Technologies GmbH",
+    "email": "team@access.watch"
   },
   "contributors": [
-    {
-      "name": "Jean Duthon",
-      "email": "jean@access.watch"
-    }
+    "François Hodierne <francois@access.watch>",
+    "Jean Duthon <jean@access.watch>"
   ],
   "license": "MIT",
   "dependencies": {
