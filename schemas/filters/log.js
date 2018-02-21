@@ -75,5 +75,5 @@ module.exports = [
     transform: status => parseInt(status, 10),
     values: statusCodes,
     showInPanel: true
-  },
+  }
 ]
