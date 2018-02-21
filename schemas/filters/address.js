@@ -1,24 +1,24 @@
-const reputation = require('./reputation');
-const country = require('./country');
+const reputation = require('./reputation')
+const country = require('./country')
 
 module.exports = [{
   id: 'value',
   label: 'ip',
   fullText: true,
-  showInPanel: true,
+  showInPanel: true
 }, {
   id: 'hostname',
   fullText: true,
-  showInPanel: true,
+  showInPanel: true
 }, {
   id: 'as_number',
-  showInPanel: true,
+  showInPanel: true
 }, {
   id: 'network_name',
   fullText: true,
-  showInPanel: true,
-}, country
-, {
+  showInPanel: true
+}, country,
+{
   id: 'flags',
   label: 'type',
   values: [
@@ -39,5 +39,5 @@ module.exports = [{
     'crawler',
     'robot'
   ],
-  showInPanel: true,
-}, reputation ];
+  showInPanel: true
+}, reputation ]
