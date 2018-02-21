@@ -1,5 +1,6 @@
 const reputation = require('./reputation')
 const addressFilters = require('./address')
+const robotFilters = require('./robot')
 
 const statusCodes = [
   100, 101, 102,
@@ -11,41 +12,33 @@ const statusCodes = [
   500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511
 ]
 
-const addressesShowInPanel = ['value']
+const addressesShowInPanel = ['value', 'hostname', 'country_code']
+
+const robotsShowInPanel = ['name']
 
 module.exports = [
   {
     id: 'identity.type',
-    label: 'type',
     values: ['browser', 'robot'],
     valueToLabel: type => (type === 'browser' ? 'Human' : 'Robot'),
     showInPanel: true
   },
-  {
-    id: 'request.method',
-    label: 'method',
-    values: ['HEAD', 'GET', 'POST', 'PUT', 'DELETE'],
-    showInPanel: true
-  },
-  {
-    id: 'response.status',
-    label: 'status',
-    transform: status => parseInt(status, 10),
-    values: statusCodes,
-    showInPanel: true
-  },
-  {
-    id: 'request.url',
-    label: 'url',
-    fullText: true,
-    showInPanel: true
-  },
-  {
-    id: 'user_agent.value',
-    fullText: true,
-    showInPanel: true
-  },
   reputation,
+  ...robotFilters.map(filter =>
+    Object.assign(
+      {},
+      filter,
+      {
+        id: `robot.${filter.id}`,
+        showInPanel: robotsShowInPanel.indexOf(filter.id) !== -1
+      },
+      filter.label
+        ? {
+          label: `robot.${filter.label}`
+        }
+        : {}
+    )
+  ),
   ...addressFilters.map(filter =>
     Object.assign(
       {},
@@ -60,5 +53,27 @@ module.exports = [
         }
         : {}
     )
-  )
+  ),
+  {
+    id: 'request.method',
+    values: ['HEAD', 'GET', 'POST', 'PUT', 'DELETE'],
+    showInPanel: true
+  },
+  {
+    id: 'request.headers.host',
+    label: 'request.host',
+    fullText: true,
+    showInPanel: true
+  },
+  {
+    id: 'request.url',
+    fullText: true,
+    showInPanel: true
+  },
+  {
+    id: 'response.status',
+    transform: status => parseInt(status, 10),
+    values: statusCodes,
+    showInPanel: true
+  },
 ]
