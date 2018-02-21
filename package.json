@@ -18,13 +18,13 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.17.1",
+    "axios": "^0.18.0",
     "ip-address": "^5.8.9",
     "lru-cache": "^4.1.1",
     "md5": "^2.2.1"
   },
   "devDependencies": {
-    "mocha": "^4.1.0",
-    "standard": "^10.0.3"
+    "mocha": "^5.0.1",
+    "standard": "^11.0.0"
   }
 }
