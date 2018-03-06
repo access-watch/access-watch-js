@@ -12,6 +12,7 @@ const statusCodes = [
 ];
 
 const addressesShowInPanel = ['value'];
+const addressesDontInclude = ['rule.type'];
 
 module.exports = [
   {
@@ -46,19 +47,20 @@ module.exports = [
     showInPanel: true,
   },
   reputation,
-  ...addressFilters.map(filter =>
-    Object.assign(
-      {},
-      filter,
-      {
-        id: `address.${filter.id}`,
-        showInPanel: addressesShowInPanel.indexOf(filter.id) !== -1,
-      },
-      filter.label
-        ? {
-            label: `address.${filter.label}`
-          }
-        : {}
-    )
+  ...addressFilters
+    .filter(({ id }) => addressesDontInclude.indexOf(id) === -1)
+    .map(filter =>
+      Object.assign(
+        {},
+        filter,
+        {
+          showInPanel: addressesShowInPanel.indexOf(filter.id) !== -1,
+        },
+        filter.label
+          ? {
+              label: `address.${filter.label}`
+            }
+          : {}
+      )
   )
 ];

@@ -1,25 +1,29 @@
 const reputation = require('./reputation');
 const country = require('./country');
+const rule = require('./rule');
 
 module.exports = [{
-  id: 'value',
+  id: 'address.value',
   label: 'ip',
   fullText: true,
   showInPanel: true,
 }, {
-  id: 'hostname',
+  id: 'address.hostname',
+  label: 'hostname',
   fullText: true,
   showInPanel: true,
 }, {
-  id: 'as_number',
+  id: 'address.as_number',
+  label: 'as_number',
   showInPanel: true,
 }, {
-  id: 'network_name',
+  id: 'address.network_name',
+  label: 'network_name',
   fullText: true,
   showInPanel: true,
 }, country
 , {
-  id: 'flags',
+  id: 'address.flags',
   label: 'type',
   values: [
     'broadband',
@@ -40,4 +44,9 @@ module.exports = [{
     'robot'
   ],
   showInPanel: true,
-}, reputation ];
+}, Object.assign(
+  {},
+  reputation, {
+    id: `address.${reputation.id}`
+  }
+), rule ];
