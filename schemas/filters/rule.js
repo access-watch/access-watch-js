@@ -1,1 +1,1 @@
-module.exports = { id: 'rule.type', values: ['whitelisted', 'blocked'] }
+module.exports = { id: 'rule.type', values: ['whitelisted', 'blocked'], showInPanel: true }
