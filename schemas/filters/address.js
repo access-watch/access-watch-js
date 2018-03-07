@@ -1,17 +1,17 @@
-const reputation = require('./reputation');
-const country = require('./country');
-const rule = require('./rule');
+const reputation = require('./reputation')
+const country = require('./country')
+const rule = require('./rule')
 
 module.exports = [{
   id: 'address.value',
   label: 'ip',
   fullText: true,
-  showInPanel: true,
+  showInPanel: true
 }, {
   id: 'address.hostname',
   label: 'hostname',
   fullText: true,
-  showInPanel: true,
+  showInPanel: true
 }, {
   id: 'address.as_number',
   label: 'as_number',
@@ -49,4 +49,4 @@ module.exports = [{
   reputation, {
     id: `address.${reputation.id}`
   }
-), rule ];
+), rule ]
