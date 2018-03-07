@@ -14,5 +14,5 @@ module.exports = [
     showInPanel: true
   },
   Object.assign({}, reputation, {id: `robot.${reputation.id}`}),
-  rule,
+  rule
 ]

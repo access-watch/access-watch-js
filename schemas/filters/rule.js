@@ -1,1 +1,1 @@
-module.exports = { id: 'rule.type', values: ['whitelist', 'blocked']};
+module.exports = { id: 'rule.type', values: ['whitelist', 'blocked'] }

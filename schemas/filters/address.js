@@ -15,14 +15,14 @@ module.exports = [{
 }, {
   id: 'address.as_number',
   label: 'as_number',
-  showInPanel: true,
+  showInPanel: true
 }, {
   id: 'address.network_name',
   label: 'network_name',
   fullText: true,
-  showInPanel: true,
-}, country
-, {
+  showInPanel: true
+}, country,
+{
   id: 'address.flags',
   label: 'type',
   values: [
@@ -43,7 +43,7 @@ module.exports = [{
     'crawler',
     'robot'
   ],
-  showInPanel: true,
+  showInPanel: true
 }, Object.assign(
   {},
   reputation, {
