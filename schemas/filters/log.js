@@ -27,37 +27,37 @@ module.exports = [
   },
   reputation,
   ...robotFilters
-  .filter(({ id }) => robotsDontInclude.indexOf(id) === -1)
-  .map(filter =>
-    Object.assign(
-      {},
-      filter,
-      {
-        showInPanel: robotsShowInPanel.indexOf(filter.id) !== -1
-      },
-      filter.label
-        ? {
-          label: `robot.${filter.label}`
-        }
-        : {}
-    )
-  ),
+    .filter(({ id }) => robotsDontInclude.indexOf(id) === -1)
+    .map(filter =>
+      Object.assign(
+        {},
+        filter,
+        {
+          showInPanel: robotsShowInPanel.indexOf(filter.id) !== -1
+        },
+        filter.label
+          ? {
+            label: `robot.${filter.label}`
+          }
+          : {}
+      )
+    ),
   ...addressFilters
-  .filter(({ id }) => addressesDontInclude.indexOf(id) === -1)
-  .map(filter =>
-    Object.assign(
-      {},
-      filter,
-      {
-        showInPanel: addressesShowInPanel.indexOf(filter.id) !== -1
-      },
-      filter.label
-        ? {
-          label: `address.${filter.label}`
-        }
-        : {}
-    )
-  ),
+    .filter(({ id }) => addressesDontInclude.indexOf(id) === -1)
+    .map(filter =>
+      Object.assign(
+        {},
+        filter,
+        {
+          showInPanel: addressesShowInPanel.indexOf(filter.id) !== -1
+        },
+        filter.label
+          ? {
+            label: `address.${filter.label}`
+          }
+          : {}
+      )
+    ),
   {
     id: 'request.method',
     values: ['HEAD', 'GET', 'POST', 'PUT', 'DELETE'],
