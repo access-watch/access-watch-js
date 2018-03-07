@@ -13,6 +13,11 @@ module.exports = [
     values: ['crawler', 'rss', 'monitoring', 'security', 'seo', 'social', 'advertising', 'tor'],
     showInPanel: true
   },
-  Object.assign({}, reputation, {id: `robot.${reputation.id}`}),
+  Object.assign(
+    {},
+    reputation, {
+      id: `robot.${reputation.id}`,
+      label: 'reputation.status'
+    }),
   rule
 ]

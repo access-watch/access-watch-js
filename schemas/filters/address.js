@@ -47,6 +47,7 @@ module.exports = [{
 }, Object.assign(
   {},
   reputation, {
-    id: `address.${reputation.id}`
+    id: `address.${reputation.id}`,
+    label: 'reputation.status'
   }
 ), rule ]
