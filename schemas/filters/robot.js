@@ -1,16 +1,23 @@
 const reputation = require('./reputation')
+const rule = require('./rule')
 
 module.exports = [
   {
-    id: 'name',
+    id: 'robot.name',
     fullText: true,
     showInPanel: true
   },
   {
-    id: 'flags',
+    id: 'robot.flags',
     label: 'type',
     values: ['crawler', 'rss', 'monitoring', 'security', 'seo', 'social', 'advertising', 'tor'],
     showInPanel: true
   },
-  reputation
+  Object.assign(
+    {},
+    reputation, {
+      id: `robot.${reputation.id}`,
+      label: 'reputation.status'
+    }),
+  rule
 ]

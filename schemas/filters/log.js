@@ -13,8 +13,10 @@ const statusCodes = [
 ]
 
 const addressesShowInPanel = ['value', 'hostname', 'country_code']
+const addressesDontInclude = ['rule.type']
 
 const robotsShowInPanel = ['name']
+const robotsDontInclude = ['rule.type']
 
 module.exports = [
   {
@@ -24,36 +26,38 @@ module.exports = [
     showInPanel: true
   },
   reputation,
-  ...robotFilters.map(filter =>
-    Object.assign(
-      {},
-      filter,
-      {
-        id: `robot.${filter.id}`,
-        showInPanel: robotsShowInPanel.indexOf(filter.id) !== -1
-      },
-      filter.label
-        ? {
-          label: `robot.${filter.label}`
-        }
-        : {}
-    )
-  ),
-  ...addressFilters.map(filter =>
-    Object.assign(
-      {},
-      filter,
-      {
-        id: `address.${filter.id}`,
-        showInPanel: addressesShowInPanel.indexOf(filter.id) !== -1
-      },
-      filter.label
-        ? {
-          label: `address.${filter.label}`
-        }
-        : {}
-    )
-  ),
+  ...robotFilters
+    .filter(({ id }) => robotsDontInclude.indexOf(id) === -1)
+    .map(filter =>
+      Object.assign(
+        {},
+        filter,
+        {
+          showInPanel: robotsShowInPanel.indexOf(filter.id) !== -1
+        },
+        filter.label
+          ? {
+            label: `robot.${filter.label}`
+          }
+          : {}
+      )
+    ),
+  ...addressFilters
+    .filter(({ id }) => addressesDontInclude.indexOf(id) === -1)
+    .map(filter =>
+      Object.assign(
+        {},
+        filter,
+        {
+          showInPanel: addressesShowInPanel.indexOf(filter.id) !== -1
+        },
+        filter.label
+          ? {
+            label: `address.${filter.label}`
+          }
+          : {}
+      )
+    ),
   {
     id: 'request.method',
     values: ['HEAD', 'GET', 'POST', 'PUT', 'DELETE'],
