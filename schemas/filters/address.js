@@ -21,7 +21,11 @@ module.exports = [{
   label: 'network_name',
   fullText: true,
   showInPanel: true
-}, country,
+}, Object.assign(
+  {},
+  country,
+  { id: `address.${country.id}` }
+),
 {
   id: 'address.flags',
   label: 'type',
