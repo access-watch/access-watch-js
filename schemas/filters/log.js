@@ -12,10 +12,10 @@ const statusCodes = [
   500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511
 ]
 
-const addressesShowInPanel = ['value', 'hostname', 'country_code']
+const addressesShowInPanel = ['address.value', 'address.hostname', 'address.country_code']
 const addressesDontInclude = ['rule.type']
 
-const robotsShowInPanel = ['name']
+const robotsShowInPanel = ['robot.name']
 const robotsDontInclude = ['rule.type']
 
 module.exports = [
