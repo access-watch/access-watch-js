@@ -22,7 +22,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "ip-address": "^5.8.9",
-    "lru-cache": "^4.1.2",
+    "lru-cache": "^5.0.0",
     "md5": "^2.2.1"
   },
   "devDependencies": {
